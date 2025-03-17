@@ -37,13 +37,6 @@
         button:hover {
             background-color: #45a049;
         }
-        #reset {
-            display: none;
-            background-color: #f44336;
-        }
-        #reset:hover {
-            background-color: #d32f2f;
-        }
     </style>
 </head>
 <body>
@@ -54,19 +47,16 @@
     <input type="number" id="guess" placeholder="Enter your guess here" />
     <br>
     <button onclick="checkGuess()">Submit Guess</button>
-    <button id="reset" onclick="resetGame()">Play Again</button>
     <p id="message"></p>
 </div>
 
 <script>
     let secretNumber = Math.floor(Math.random() * 100) + 1;
     let attempts = 0;
-    const maxAttempts = 10;
 
     function checkGuess() {
         const userGuess = Number(document.getElementById('guess').value);
         const message = document.getElementById('message');
-        const guessInput = document.getElementById('guess');
         attempts++;
 
         if (userGuess < 1 || userGuess > 100 || isNaN(userGuess)) {
@@ -77,41 +67,14 @@
         if (userGuess === secretNumber) {
             message.textContent = `🎉 Correct! You guessed the number in ${attempts} tries! 🎉`;
             message.style.color = 'green';
-            endGame();
         } else if (userGuess < secretNumber) {
-            message.textContent = `Too low! Attempts left: ${maxAttempts - attempts}`;
+            message.textContent = "Too low! Try again.";
             message.style.color = 'blue';
         } else {
-            message.textContent = `Too high! Attempts left: ${maxAttempts - attempts}`;
+            message.textContent = "Too high! Try again.";
             message.style.color = 'red';
         }
-
-        if (attempts >= maxAttempts) {
-            message.textContent = `☹️ Game Over! The number was ${secretNumber}.`;
-            message.style.color = 'black';
-            endGame();
-        }
     }
-
-    function endGame() {
-        document.getElementById('guess').disabled = true;
-        document.getElementById('reset').style.display = 'inline-block';
-    }
-
-    function resetGame() {
-        secretNumber = Math.floor(Math.random() * 100) + 1;
-        attempts = 0;
-        document.getElementById('guess').disabled = false;
-        document.getElementById('message').textContent = "";
-        document.getElementById('guess').value = "";
-        document.getElementById('reset').style.display = 'none';
-    }
-
-    document.getElementById('guess').addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            checkGuess();
-        }
-    });
 </script>
 
 </body>
