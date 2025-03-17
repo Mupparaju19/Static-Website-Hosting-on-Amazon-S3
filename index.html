@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #reset {
+            display: none;
+            background-color: #f44336;
+        }
+        #reset:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎲 Guess the Number 🎲</h1>
+    <p>I'm thinking of a number between 1 and 100. Can you guess what it is?</p>
+    <input type="number" id="guess" placeholder="Enter your guess here" />
+    <br>
+    <button onclick="checkGuess()">Submit Guess</button>
+    <button id="reset" onclick="resetGame()">Play Again</button>
+    <p id="message"></p>
+</div>
+
+<script>
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    function checkGuess() {
+        const userGuess = Number(document.getElementById('guess').value);
+        const message = document.getElementById('message');
+        const guessInput = document.getElementById('guess');
+        attempts++;
+
+        if (userGuess < 1 || userGuess > 100 || isNaN(userGuess)) {
+            message.textContent = "Please enter a valid number between 1 and 100!";
+            return;
+        }
+
+        if (userGuess === secretNumber) {
+            message.textContent = `🎉 Correct! You guessed the number in ${attempts} tries! 🎉`;
+            message.style.color = 'green';
+            endGame();
+        } else if (userGuess < secretNumber) {
+            message.textContent = `Too low! Attempts left: ${maxAttempts - attempts}`;
+            message.style.color = 'blue';
+        } else {
+            message.textContent = `Too high! Attempts left: ${maxAttempts - attempts}`;
+            message.style.color = 'red';
+        }
+
+        if (attempts >= maxAttempts) {
+            message.textContent = `☹️ Game Over! The number was ${secretNumber}.`;
+            message.style.color = 'black';
+            endGame();
+        }
+    }
+
+    function endGame() {
+        document.getElementById('guess').disabled = true;
+        document.getElementById('reset').style.display = 'inline-block';
+    }
+
+    function resetGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        document.getElementById('guess').disabled = false;
+        document.getElementById('message').textContent = "";
+        document.getElementById('guess').value = "";
+        document.getElementById('reset').style.display = 'none';
+    }
+
+    document.getElementById('guess').addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            checkGuess();
+        }
+    });
+</script>
+
+</body>
+</html>
